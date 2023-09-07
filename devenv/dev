@@ -1,4 +1,0 @@
-- NEXT_PUBLIC_BTC_EXPLORER_SERVER=http://127.0.0.1:5000
-
-+        GIT_URI: https://github.com/EmbeddedAndroid/explorer.git
-+        GIT_BRANCH: cfg-btc-endpoint
