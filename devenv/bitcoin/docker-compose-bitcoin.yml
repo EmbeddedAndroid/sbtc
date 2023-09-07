@@ -1,0 +1,16 @@
+version: '3.2'
+
+services:
+  bitcoin:
+    image: bitcoin:latest
+    container_name: bitcoin
+    build:
+      context: ./docker
+   command: bash -c "/srv/explorer/run.sh bitcoin-regtest explorer"
+   ports:
+     - 18444:18444
+     - 18443:18443
+     - 8094:80
+   environment:
+     - NO_REGTEST_MINING=1
+     - DEBUG=verbose

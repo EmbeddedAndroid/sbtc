@@ -1,0 +1,35 @@
+[node]
+working_dir = "/root/stacks-node/data"
+rpc_bind = "0.0.0.0:20443"
+p2p_bind = "0.0.0.0:20444"
+wait_time_for_microblocks = 10000
+
+[[events_observer]]
+endpoint = "stacks-api:3700"
+retry_count = 255
+events_keys = ["*"]
+
+[burnchain]
+chain = "bitcoin"
+mode = "{STACKS_NETWORK}"
+peer_host = "bitcoin"
+rpc_port = 18444
+peer_port = 18332
+satoshis_per_byte = 100
+burn_fee_cap = 20000
+
+[connection_options]
+read_only_call_limit_write_length = 0
+read_only_call_limit_read_length = 100000
+read_only_call_limit_write_count = 0
+read_only_call_limit_read_count = 30
+read_only_call_limit_runtime = 1000000000
+
+[fee_estimation]
+cost_estimator = "naive_pessimistic"
+fee_estimator = "fuzzed_weighted_median_fee_rate"
+fee_rate_fuzzer_fraction = 0.1
+fee_rate_window_size = 5
+cost_metric = "proportion_dot_product"
+log_error = true
+enabled = true
