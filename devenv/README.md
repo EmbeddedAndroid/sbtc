@@ -68,7 +68,7 @@ cd devenv/
 ./mine.sh <number of blocks>
 ```
 Once you mine blocks on bitcoin, there is a delay before the 
-stacks mines those blocks, and relays the data to the API. If i
+stacks mines those blocks, and relays the data to the API. If
 your explorer is crashing, just wait a few minutes and try again.
 
 ## Services
