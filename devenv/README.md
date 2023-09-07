@@ -92,6 +92,21 @@ http://127.0.0.1:3000
 
 The Stacks API service is running on port 3999.
 
+## sBTC Development
+
+First build the sBTC container
+
+```
+cd devenv/sbtc
+./build
+```
+
+Now you can use the sbtc cli by calling
+
+```
+./devenv/sbtc/bin/sbtc <args>
+```
+
 ## Stopping Containers
 
 To stop the entire deployment simply run:
@@ -116,7 +131,7 @@ easy to add persistent storage volumes if needed.
 ## TODO
 
 - Why does it take stacks so long to start mining blocks?
-- Persist the bitcoin wallet address for reuse on stacks later
-- Fix sBTC repo, and document how to deploy Romeo.
+- Faucet?
+- Deploy Romeo to devnet, and document
 - Investigate Docker Compose Fragment and Extensions.
 
