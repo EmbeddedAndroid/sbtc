@@ -6,11 +6,15 @@ services:
     container_name: bitcoin
     build:
       context: ./docker
-   command: bash -c "/srv/explorer/run.sh bitcoin-regtest explorer"
-   ports:
-     - 18444:18444
-     - 18443:18443
-     - 8094:80
-   environment:
-     - NO_REGTEST_MINING=1
-     - DEBUG=verbose
+      args:
+        VERSION: '25.0'
+    ports:
+      - 18444:18444
+      - 18443:18443
+    environment:
+      - 'BTC_NETWORK=regtest'
+      - 'BTC_DISABLEWALLET=0'
+      - 'BTC_TXINDEX=1'
+      - 'BTC_RPCALLOWIP=::/0'
+      - 'BTC_RPCPASSWORD=devnet'
+      - 'BTC_RPCUSER=devnet'

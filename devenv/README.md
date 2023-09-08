@@ -52,35 +52,40 @@ There is a helper script at the top level directory to facilitate logging:
 
 ```
 ./log bitcoin
+./log bitcoin-explorer
 ./log stacks
 ./log stacks-api
 ./log stacks-explorer
 ./log postgres
+./log miner
 ```
-
-## Mining
-
-For a development environment we need to control block production, 
-there is a helper script to do this:
-
-```
-cd devenv/
-./mine.sh <number of blocks>
-```
-Once you mine blocks on bitcoin, there is a delay before the 
-stacks mines those blocks, and relays the data to the API. If
-your explorer is crashing, just wait a few minutes and try again.
-
 ## Services
 
-### Esplora
-You can access the [Esplora](https://github.com/Blockstream/esplora)
+### Miner
+There is a BTC mining service which will create a legacy wallet, 
+importaddress for UXTO monitoring that is defined in the stacks 
+Config.toml.
+
+By default it automatically mines 100 blocks initially, and 
+generates 1 block every ten seconds from there on.
+
+If you want to customize these values you can, update the 
+variables in the docker-compose.yml:
+
+```
+INIT_BTC_BLOCKS: <number of blocks to initially mine>
+```
+```
+BTC_BLOCK_GEN_TIME: <number of seconds before the next block is mined>
+```
+
+### Bitcoin
+You can access the [Bitcoin Explorer](https://github.com/janoside/btc-rpc-explorer)
 explorer at:
 
 ```
-http://127.0.0.1:8094
+http://127.0.0.1:3002
 ```
-The Electrum RPC service is running on port 50001.
 
 ### Stacks
 You can access the [Stacks Explorer](https://github.com/hirosystems/explorer)
@@ -131,7 +136,6 @@ easy to add persistent storage volumes if needed.
 ## TODO
 
 - Why does it take stacks so long to start mining blocks?
-- Faucet?
 - Deploy Romeo to devnet, and document
 - Investigate Docker Compose Fragment and Extensions.
 
