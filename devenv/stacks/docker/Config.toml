@@ -76,7 +76,7 @@ amount = 100000000000000
 [[events_observer]]
 endpoint = "stacks-api:3700"
 retry_count = 255
-include_data_events = false
+#include_data_events = false
 events_keys = ["*"]
 
 [burnchain]

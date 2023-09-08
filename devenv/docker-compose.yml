@@ -6,15 +6,19 @@ services:
     container_name: bitcoin
     build:
       context: ./bitcoin/docker
-    command: bash -c "/srv/explorer/run.sh bitcoin-regtest explorer"
+      args:
+        VERSION: '25.0'
     ports:
-      - 50001:50001
       - 18444:18444
       - 18443:18443
-      - 8094:80
     environment:
-      - NO_REGTEST_MINING=1
-      - DEBUG=verbose
+      - 'BTC_NETWORK=regtest'
+      - 'BTC_DISABLEWALLET=0'
+      - 'BTC_TXINDEX=1'
+      - 'BTC_RPCBIND=0.0.0.0'
+      - 'BTC_RPCALLOWIP=0.0.0.0/0'
+      - 'BTC_RPCPASSWORD=devnet'
+      - 'BTC_RPCUSER=devnet'
   postgres:
     image: postgres:15-alpine
     container_name: postgres
@@ -31,7 +35,7 @@ services:
       args:
         STACKS_NODE_VERSION: '2.4.0.0.0'
         GIT_URI: https://github.com/stacks-network/stacks-blockchain.git
-        GIT_BRANCH: 2.4.0.0.0
+        GIT_BRANCH: develop
     ports:
       - 20444:20444
       - 20443:20443
@@ -40,7 +44,6 @@ services:
     environment:
       - STACKS_LOG_DEBUG=0
       - STACKS_LOG_JSON=0
-      - STACKS_NETWORK=mocknet
   stacks-api:
     image: stacks-api:latest
     container_name: stacks-api
@@ -65,7 +68,6 @@ services:
       - PG_PASSWORD=postgres
       - PG_DATABASE=postgres
       - STACKS_CHAIN_ID=0x80000000
-      - V2_POX_MIN_AMOUNT_USTX=90000000260
       - STACKS_CORE_EVENT_PORT=3700
       - STACKS_CORE_EVENT_HOST=0.0.0.0
       - STACKS_BLOCKCHAIN_API_PORT=3999
@@ -91,3 +93,37 @@ services:
       - postgres
     environment:
       - NEXT_PUBLIC_MAINNET_API_SERVER=http://127.0.0.1:3999
+  miner:
+    image: miner:latest
+    container_name: miner
+    build:
+      context: ./miner/docker
+    depends_on:
+      - bitcoin
+    environment:
+      INIT_BTC_BLOCKS: 100
+      BTC_BLOCK_GEN_TIME: 10
+  explorer:
+    image: bitcoin-explorer:latest
+    container_name: bitcoin-explorer
+    build:
+      context: ./bitcoin-explorer/docker
+      args:
+        BTCEXP_NODE_VERSION: 'v3.4.0'
+        GIT_URI: https://github.com/janoside/btc-rpc-explorer.git
+        GIT_BRANCH: 'v3.4.0'
+    ports:
+      - 3002:3002
+    depends_on:
+      - bitcoin
+      - miner
+    environment:
+      BTCEXP_HOST: 0.0.0.0
+      BTCEXP_BITCOIND_HOST: bitcoin
+      BTCEXP_BITCOIND_PORT: 18443
+      BTCEXP_BITCOIND_USER: devnet
+      BTCEXP_BITCOIND_PASS: devnet
+      BTCEXP_BITCOIND_RPC_TIMEOUT: 5000
+      BTCEXP_BITCOIND_URI: bitcoin://devnet:devnet@bitcoin:18443?timeout=10000
+      BTCEXP_SLOW_DEVICE_MODE: false
+      BTCEXP_UI_THEME: dark
