@@ -119,7 +119,10 @@ jobs:
             devenv:
               - 'devenv/**'
 
+      - name: Checkout
+        if: steps.changes.outputs.devenv == 'true'
+        uses: actions/checkout@v3
+
       - name: Build devenv containers
         if: steps.changes.outputs.devenv == 'true'
-        working-directory: devenv
-        run: docker compose build  
+        run: ./devenv/build.sh  
